@@ -1,8 +1,13 @@
 const prompt = require('prompt-sync')()
-const { baralhos } = require('./data')
+const { baralhos, flashcards } = require('./data')
 const { criarBaralho } = require('./baralhos/criarBaralho')
 const { listarBaralho } = require('./baralhos/listarBaralho')
 const { atualizarBaralho } = require('./baralhos/atualizarBaralho')
+const { deletarBaralho } = require('./baralhos/deletarBaralho')
+const { criarFlashcard } =require('./flashcards/criarFlashcard')
+const { listarFlashcard } = require('./flashcards/listarFlashcard')
+const { atualizarFlashcard } = require('./flashcards/atualizarFlashcard')
+const { deletarFlashcard } = require('./flashcards/deletarFlashcard')
 
 menu()
 
@@ -25,14 +30,48 @@ function menu(){
     let opcao = prompt('Digite uma opção: ')
     switch(opcao){
         case '1':
+            listarBaralho()
+            id = parseInt(prompt('Digite em qual baralho quer criar o novo Flashcard: '))
+            if(id > 0 && id <= baralhos.length){
+                let pergunta = prompt('Digite a pergunta do Flashcard: ')
+                let resposta = prompt('Digite a resposta: ')
+                criarFlashcard(id, pergunta, resposta)
+                console.log('Flashcard criado com sucesso!')
+            } else {
+                console.log('Número inválido, tente novamente')
+            }
+            menu()
             break
         case '2':
+            console.log('Lista de Flashcards: ')
+            listarFlashcard()
+            menu()
             break
         case '3':
             break
         case '4':
+            listarFlashcard()
+            id = parseInt(prompt('Digite o ID do flashcard que deseja atualizar: '))
+            if(id > 0 && id <= flashcards.length){
+                let novaPergunta = prompt('Digite a nova pergunta: ')
+                let novaResposta = prompt('Digite a nova resposta: ')
+                atualizarFlashcard(id, novaPergunta, novaResposta)
+                console.log('Flashcard atualizado com sucesso!')
+            } else {
+                console.log('Número inválido, tente novamente')
+            }
+            menu()
             break
         case '5':
+            listarFlashcard()
+            id = parseInt(prompt('Digite o ID do flashcard que deseja deletar: '))
+            if(id > 0 && id <= flashcards.length){
+                deletarFlashcard(id)
+                console.log('Flashcard deletado com sucesso!')
+            } else {
+                console.log('Número inválido, tente novamente')
+            }
+            menu()
             break
         case '6':
             break
@@ -45,27 +84,37 @@ function menu(){
             menu()
             break
         case '9':
-            console.log('Lista de baralhos: ')
+            console.log('Lista de Baralhos: ')
             listarBaralho()
             menu()
             break
         case '10':
             listarBaralho()
-            id = parseInt('Digite o ID do baralho que deseja atualizar: ')
-            if(index > 0 && index <= baralhos.length){
+            id = parseInt(prompt('Digite o ID do baralho que deseja atualizar: '))
+            if(id > 0 && id <= baralhos.length){
                 let baralhoAlterado = prompt('Digite o novo título do baralho: ')
-                
+                atualizarBaralho(id, baralhoAlterado)
+                console.log('Baralho atualizado com sucesso!')
             } else {
                 console.log('Número inválido, tente novamente')
             }
-            
+            menu()
             break
         case '11':
+            listarBaralho()
+            id = parseInt(prompt('Digite o ID do baralho que deseja deletar: '))
+            if(id > 0 && id <= baralhos.length){
+                deletarBaralho(id)
+                console.log('Baralho deletado com sucesso!')
+            } else {
+                console.log('Número inválido, tente novamente')
+            }
+            menu()
             break
         case '0':
             break
         default:
             console.log('Opss, essa opção não existe, tente novamente')
-            menuBaralhoFlashcard()
+            menu()
     }
 }
